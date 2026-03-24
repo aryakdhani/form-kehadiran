@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Daftar Hadir: Diseminasi Strategi Pengelolaan Perikanan</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #673ab7;
+    --primary-light: #ede7f6;
+    --accent: #f4b400;
+    --required: #d93025;
+    --border: #dadce0;
+    --text: #202124;
+    --text-soft: #5f6368;
+    --bg: #f0ebf8;
+    --card: #ffffff;
+    --radius: 8px;
+  }
+  body { font-family: 'Roboto', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
+  .page { max-width: 640px; margin: 0 auto; }
+  .header-card { background: var(--card); border-radius: var(--radius); border-top: 10px solid var(--accent); padding: 0 0 1.5rem; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.12); overflow: hidden; }
+  .header-card h1, .header-card .desc, .header-card .desc-en { padding: 0 1.5rem; }
+  .header-card h1 { padding-top: 1.25rem; }
+  .header-card h1 { font-family: 'Google Sans', sans-serif; font-size: 1.5rem; font-weight: 700; line-height: 1.35; color: var(--text); margin-bottom: 1rem; }
+  .header-card h1 em { font-style: italic; font-weight: 400; }
+  .header-card .desc { font-size: 14px; color: var(--text); line-height: 1.6; margin-bottom: 6px; }
+  .header-card .desc-en { font-size: 13px; color: var(--text-soft); font-style: italic; line-height: 1.6; }
+  .required-note { background: var(--card); border-radius: var(--radius); padding: 0.85rem 1.5rem; margin-bottom: 12px; font-size: 13px; color: var(--text-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+  .required-note span { color: var(--required); }
+  .q-card { background: var(--card); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.12); border-left: 4px solid transparent; transition: border-color 0.2s; }
+  .q-card:focus-within { border-left-color: var(--primary); }
+  .q-label { font-size: 15px; font-weight: 400; color: var(--text); margin-bottom: 1rem; line-height: 1.5; }
+  .q-label em { font-style: italic; color: var(--text-soft); }
+  .q-label .req { color: var(--required); margin-left: 2px; }
+  .text-field { width: 100%; border: none; border-bottom: 1px solid var(--border); padding: 6px 0; font-family: 'Roboto', sans-serif; font-size: 14px; color: var(--text); background: transparent; outline: none; transition: border-color 0.15s; }
+  .text-field:focus { border-bottom: 2px solid var(--primary); }
+  .text-field::placeholder { color: #bdc1c6; }
+  .radio-group { display: flex; flex-direction: column; gap: 4px; }
+  .radio-item { display: flex; align-items: center; gap: 12px; padding: 10px 8px; border-radius: 4px; cursor: pointer; transition: background 0.1s; }
+  .radio-item:hover { background: #f8f9fa; }
+  .radio-item input[type=radio] { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; flex-shrink: 0; }
+  .radio-item span { font-size: 14px; color: var(--text); }
+  .sig-wrapper { position: relative; border: 1px solid var(--border); border-radius: 4px; background: #fafafa; overflow: hidden; cursor: crosshair; }
+  #sigCanvas { display: block; width: 100%; height: 180px; touch-action: none; }
+  .sig-hint { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 13px; color: #dadce0; pointer-events: none; user-select: none; white-space: nowrap; transition: opacity 0.2s; }
+  .sig-baseline { position: absolute; bottom: 40px; left: 5%; right: 5%; height: 1px; background: #e8eaed; pointer-events: none; }
+  .sig-toolbar { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 5px; padding: 7px 16px; font-family: 'Google Sans', sans-serif; font-size: 13px; font-weight: 500; border-radius: 4px; cursor: pointer; border: none; transition: background 0.15s; }
+  .btn-text { background: transparent; color: var(--primary); }
+  .btn-text:hover { background: var(--primary-light); }
+  .btn-submit { background: var(--primary); color: white; padding: 10px 28px; font-size: 14px; border-radius: 4px; }
+  .btn-submit:hover { background: #5e35b1; }
+  .btn-submit:active { transform: scale(0.98); }
+  .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
+  .pen-row { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+  .pen-row label { font-size: 12px; color: var(--text-soft); }
+  .pen-row input[type=range] { width: 70px; accent-color: var(--primary); }
+  .submit-area { background: var(--card); border-radius: var(--radius); padding: 1.25rem 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.12); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-top: 12px; }
+  .btn-reset { background: transparent; color: var(--primary); font-family: 'Google Sans', sans-serif; font-size: 13px; font-weight: 500; border: none; cursor: pointer; padding: 7px 12px; border-radius: 4px; }
+  .btn-reset:hover { background: var(--primary-light); }
+  .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(12px); color: white; font-size: 13px; padding: 10px 20px; border-radius: 4px; opacity: 0; transition: all 0.25s; pointer-events: none; white-space: nowrap; z-index: 999; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.success { background: #1e8e3e; }
+  .toast.error { background: #d93025; }
+  .toast.info { background: #323232; }
+  .q-card.error { border-left-color: var(--required); }
+  .err-msg { font-size: 12px; color: var(--required); margin-top: 6px; display: none; }
+  .q-card.error .err-msg { display: block; }
+  .q-card.error .text-field { border-bottom-color: var(--required); }
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 100; align-items: center; justify-content: center; }
+  .overlay.show { display: flex; }
+  .spinner-box { background: white; border-radius: var(--radius); padding: 2rem 2.5rem; text-align: center; }
+  .spinner { width: 36px; height: 36px; border: 3px solid #ede7f6; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner-box p { font-size: 14px; color: var(--text-soft); }
+  @media (max-width: 480px) {
+    .submit-area { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header-card">
+    <img src="https://i.imgur.com/Shc1AYz.jpeg" 
+     alt="Header"
+     style="width:100%; display:block; margin-bottom:1.25rem;" />
+  <h1>
+    Daftar Hadir: Diseminasi Strategi Pengelolaan Perikanan<br>
+    (<strong><em>Harvest Strategy Dissemination Attendance List</em></strong>)
+  </h1>
+    <p class="desc">Mohon isi formulir ini untuk mengkonfirmasi kehadiran Anda.</p>
+    <p class="desc-en">Please fill out this form to confirm your attendance.</p>
+  </div>
+
+  <div class="required-note"><span>*</span> Indicates required question</div>
+
+  <div class="q-card" id="q-nama">
+    <div class="q-label">Nama Lengkap (<em>Full Name</em>) <span class="req">*</span></div>
+    <input class="text-field" type="text" id="nama" placeholder="Your answer" autocomplete="name" />
+    <div class="err-msg">This is a required question.</div>
+  </div>
+
+  <div class="q-card" id="q-gender">
+    <div class="q-label">Jenis Kelamin (<em>Gender</em>) <span class="req">*</span></div>
+    <div class="radio-group">
+      <label class="radio-item"><input type="radio" name="gender" value="Laki-laki" /><span>Laki-laki (<em>Male</em>)</span></label>
+      <label class="radio-item"><input type="radio" name="gender" value="Perempuan" /><span>Perempuan (<em>Female</em>)</span></label>
+      <label class="radio-item"><input type="radio" name="gender" value="Prefer not to answer" /><span>Memilih tidak menjawab (<em>Prefer not to answer</em>)</span></label>
+    </div>
+    <div class="err-msg">This is a required question.</div>
+  </div>
+
+  <div class="q-card" id="q-org">
+    <div class="q-label">Organisasi/Afiliasi (<em>Organization/Affiliation</em>) <span class="req">*</span></div>
+    <input class="text-field" type="text" id="org" placeholder="Your answer" />
+    <div class="err-msg">This is a required question.</div>
+  </div>
+
+  <div class="q-card" id="q-jabatan">
+    <div class="q-label">Jabatan (<em>Position/Title</em>) <span class="req">*</span></div>
+    <input class="text-field" type="text" id="jabatan" placeholder="Your answer" />
+    <div class="err-msg">This is a required question.</div>
+  </div>
+
+  <div class="q-card" id="q-kontak">
+    <div class="q-label">Nomor Telepon (<em>Phone Number</em>) <span class="req">*</span></div>
+    <input class="text-field" type="tel" id="kontak" placeholder="Contoh: 08123456789" inputmode="numeric" pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+    <div class="err-msg">Nomor telepon wajib diisi dan hanya boleh angka.</div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-label">Alamat Email (<em>Email Address</em>)</div>
+    <input class="text-field" type="email" id="email" placeholder="Your answer" autocomplete="email" />
+  </div>
+
+  <div class="q-card" id="q-sig">
+    <div class="q-label">Tanda Tangan (<em>Signature</em>) <span class="req">*</span></div>
+    <div class="sig-wrapper">
+      <canvas id="sigCanvas"></canvas>
+      <div class="sig-baseline"></div>
+      <div class="sig-hint" id="sigHint">Tanda tangani di sini / Sign here</div>
+    </div>
+    <div class="sig-toolbar">
+      <button class="btn btn-text" onclick="clearSig()">✕ Hapus</button>
+      <div class="pen-row">
+        <label>Tebal:</label>
+        <input type="range" id="penSize" min="1" max="6" value="2" />
+      </div>
+    </div>
+    <div class="err-msg">Tanda tangan wajib diisi.</div>
+  </div>
+
+  <div class="submit-area">
+    <button class="btn-reset" onclick="resetForm()">Reset Form</button>
+    <button class="btn btn-submit" id="submitBtn" onclick="submitForm()">Submit</button>
+  </div>
+
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="spinner-box">
+    <div class="spinner"></div>
+    <p>Mengirim data...</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwEd8GeXaUbprysBjPdtNkrJNaDX7qqaeYS229jvl7nhUVUxZrQBryzQcL_n0OWPv1m/exec';
+
+  const canvas = document.getElementById('sigCanvas');
+  const ctx = canvas.getContext('2d');
+  const hint = document.getElementById('sigHint');
+  let drawing = false, hasSig = false, lx = 0, ly = 0;
+
+  function resizeCanvas() {
+    const ratio = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const saved = hasSig ? canvas.toDataURL() : null;
+    canvas.width = rect.width * ratio;
+    canvas.height = (rect.height || 180) * ratio;
+    ctx.scale(ratio, ratio);
+    applyStyle();
+    if (saved) {
+      const img = new Image();
+      img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height || 180);
+      img.src = saved;
+    }
+  }
+
+  function applyStyle() {
+    ctx.strokeStyle = '#202124';
+    ctx.lineWidth = +document.getElementById('penSize').value;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+  }
+
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  document.getElementById('penSize').addEventListener('input', applyStyle);
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    if (e.touches) return [e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top];
+    return [e.clientX - rect.left, e.clientY - rect.top];
+  }
+
+  canvas.addEventListener('mousedown', e => { drawing = true; [lx, ly] = getPos(e); });
+  canvas.addEventListener('mousemove', e => {
+    if (!drawing) return;
+    const [x, y] = getPos(e);
+    ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(x, y); ctx.stroke();
+    [lx, ly] = [x, y];
+    if (!hasSig) { hasSig = true; hint.style.opacity = '0'; }
+  });
+  canvas.addEventListener('mouseup', () => drawing = false);
+  canvas.addEventListener('mouseleave', () => drawing = false);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; [lx, ly] = getPos(e); }, { passive: false });
+  canvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    if (!drawing) return;
+    const [x, y] = getPos(e);
+    ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(x, y); ctx.stroke();
+    [lx, ly] = [x, y];
+    if (!hasSig) { hasSig = true; hint.style.opacity = '0'; }
+  }, { passive: false });
+  canvas.addEventListener('touchend', () => drawing = false);
+
+  function clearSig() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    hasSig = false;
+    hint.style.opacity = '1';
+    document.getElementById('q-sig').classList.remove('error');
+  }
+
+  function validate() {
+    let valid = true;
+    const checks = [
+      { id: 'q-nama', val: () => document.getElementById('nama').value.trim() },
+      { id: 'q-gender', val: () => document.querySelector('input[name=gender]:checked') },
+      { id: 'q-org', val: () => document.getElementById('org').value.trim() },
+      { id: 'q-jabatan', val: () => document.getElementById('jabatan').value.trim() },
+      { id: 'q-kontak', val: () => document.getElementById('kontak').value.trim() },
+    ];
+    checks.forEach(c => {
+      const el = document.getElementById(c.id);
+      if (!c.val()) { el.classList.add('error'); valid = false; }
+      else el.classList.remove('error');
+    });
+    const sigCard = document.getElementById('q-sig');
+    if (!hasSig) { sigCard.classList.add('error'); valid = false; }
+    else sigCard.classList.remove('error');
+    return valid;
+  }
+
+  async function submitForm() {
+    if (!validate()) { showToast('Mohon lengkapi semua kolom wajib', 'error'); return; }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    document.getElementById('overlay').classList.add('show');
+
+    const payload = {
+      nama: document.getElementById('nama').value.trim(),
+      gender: document.querySelector('input[name=gender]:checked')?.value || '',
+      org: document.getElementById('org').value.trim(),
+      jabatan: document.getElementById('jabatan').value.trim(),
+      kontak: document.getElementById('kontak').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      signature: canvas.toDataURL('image/png')
+    };
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      document.getElementById('overlay').classList.remove('show');
+      showToast('Data berhasil dikirim! Terima kasih.', 'success');
+      setTimeout(() => resetForm(), 2500);
+
+    } catch (err) {
+      document.getElementById('overlay').classList.remove('show');
+      showToast('Gagal mengirim. Cek koneksi internet.', 'error');
+      btn.disabled = false;
+    }
+  }
+
+  function resetForm() {
+    ['nama','org','jabatan','kontak','email'].forEach(id => document.getElementById(id).value = '');
+    document.querySelectorAll('input[name=gender]').forEach(r => r.checked = false);
+    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('error'));
+    document.getElementById('submitBtn').disabled = false;
+    clearSig();
+  }
+
+  function showToast(msg, type = 'info') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast ' + type;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
+</body>
+</html>
